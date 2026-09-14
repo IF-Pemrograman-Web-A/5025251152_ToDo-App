@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <title>ToDo List</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <header>
+            <h1><b>To Do List</b><h1>
+        </header>
+
+        <main class="container">
+            <aside class="left-panel">
+                <section class="form">
+                    <h2>Tambah Tugas</h2>
+                    <form action="#">
+                        <input type="text" placeholder="Ketik disini..." required>
+                        <button type="submit">Simpan</button>
+                    </form>
+                </section>
+
+                <section class="list">
+                    <h2>Daftar Tugas</h2>
+                    <ul class="todo-list">
+                        <li class="todo-item">Membuat Website To Do List</li>
+                        <li class="todo-item">Push Rank Kaggle</li>
+                        <li class="todo-item">Belanja Bulanan</li>
+                    </ul>
+                </section>
+            </aside>
+
+            <section class="right-panel">
+                <h2>Detail Tugas</h2>
+                <div class="editor">
+                    <label for="edit-title">Judul Tugas :</label>
+                    <input type="text" id="edit-title" value="Membuat Website To Do List">
+                    <br>
+                    <label for="edit-desc">Deskripsi :</label>
+                    <textarea id="edit-desc" rows="3" cols="70">Membuat website To Do List menggunakan HTML dan CSS. Website ini akan menjadi reminder tentang tugas-tugas yang perlu dikerjakan.</textarea>
+                    <br>
+                    <button class="save">Simpan</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 To Do List. All rights reserved.</p>
+        </footer>
+    </body>
+</html>
