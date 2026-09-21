@@ -8,26 +8,25 @@
 
     <body>
         <header>
-            <h1><b>To Do List</b><h1>
+            <div class="header-content">
+                <h1><b>To Do List</b></h1>
+                <button id="theme-toggle" type="button">Dark Mode</button>
+            </div>
         </header>
 
         <main class="container">
             <aside class="left-panel">
                 <section class="form">
                     <h2>Tambah Tugas</h2>
-                    <form action="#">
-                        <input type="text" placeholder="Ketik disini..." required>
+                    <form id="todo-form" action="#"> 
+                        <input type="text" id="todo-input" placeholder="Ketik disini..." required>
                         <button type="submit">Simpan</button>
                     </form>
                 </section>
 
                 <section class="list">
                     <h2>Daftar Tugas</h2>
-                    <ul class="todo-list">
-                        <li class="todo-item">Membuat Website To Do List</li>
-                        <li class="todo-item">Push Rank Kaggle</li>
-                        <li class="todo-item">Belanja Bulanan</li>
-                    </ul>
+                    <ul class="todo-list" id="todo-list"></ul>
                 </section>
             </aside>
 
@@ -35,18 +34,20 @@
                 <h2>Detail Tugas</h2>
                 <div class="editor">
                     <label for="edit-title">Judul Tugas :</label>
-                    <input type="text" id="edit-title" value="Membuat Website To Do List">
+                    <input type="text" id="edit-title" placeholder="Pilih tugas di daftar untuk mengedit">
                     <br>
                     <label for="edit-desc">Deskripsi :</label>
-                    <textarea id="edit-desc" rows="3" cols="70">Membuat website To Do List menggunakan HTML dan CSS. Website ini akan menjadi reminder tentang tugas-tugas yang perlu dikerjakan.</textarea>
+                    <textarea id="edit-desc" rows="3" cols="70" placeholder="Deskripsi tugas..."></textarea>
                     <br>
-                    <button class="save">Simpan</button>
+                    <button class="save" id="save-detail">Simpan</button>
                 </div>
             </section>
         </main>
 
         <footer>
-            <p>&copy; 2026 To Do List. All rights reserved.</p>
+            <p>&copy; 2026 To Do List. 5025251152 - Dewa Ngakan Putu Sunyananda Triyanca.</p>
         </footer>
+
+        <script src="script.js"></script>
     </body>
 </html>
