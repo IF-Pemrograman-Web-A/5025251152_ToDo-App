@@ -1,4 +1,4 @@
-﻿# [E03] The Lost Cavern - ToDo App
+# [E03] The Lost Cavern - ToDo App
 
 ## Identitas
 - Nama : Dewa Ngakan Putu Sunyananda Triyanca
@@ -19,8 +19,14 @@ Project ini merupakan web aplikasi manajemen tugas (To-Do List) dengan fitur pen
 
 ## Preview
 ### 1. Desktop Preview
-<img width="1520" height="677" alt="image" src="https://github.com/user-attachments/assets/3ef6dbb3-329a-4fb5-883d-95881aec363c" />
+<img width="1535" height="693" alt="image" src="https://github.com/user-attachments/assets/dc369c96-28b4-4cd0-a1f4-10f92fdd5edd" />
+<img width="1535" height="692" alt="image" src="https://github.com/user-attachments/assets/a002e2f2-875f-41d0-8b1c-f6388d2bfe00" />
+
+
 
 ### 2. Mobile Preview
-<img width="482" height="681" alt="image" src="https://github.com/user-attachments/assets/dbc9efdc-32f7-416e-bbae-1da6ab28cba1" />
+<img width="753" height="693" alt="image" src="https://github.com/user-attachments/assets/44633aa6-8cb5-426b-8785-f7cab4fd8847" />
+<img width="750" height="692" alt="image" src="https://github.com/user-attachments/assets/93193e9d-919a-4e6a-806e-d4a134021d5f" />
+
+
 
