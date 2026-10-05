@@ -2,51 +2,123 @@
 <html lang="id">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ToDo List</title>
         <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
+        <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
         <header>
-            <h1><b>To Do List</b><h1>
+            <div class="header-content">
+                <h1>To Do List</h1>
+                <button id="theme-toggle" type="button">Mode Gelap</button>
+            </div>
         </header>
 
-        <main class="container">
-            <aside class="left-panel">
-                <section class="form">
-                    <h2>Tambah Tugas</h2>
-                    <form action="#">
-                        <input type="text" placeholder="Ketik disini..." required>
-                        <button type="submit">Simpan</button>
+        <p class="app-message" id="app-message" role="alert"></p>
+
+        <main class="container" id="main-content" tabindex="-1">
+            <div class="left-panel">
+                <section class="form" aria-labelledby="form-heading">
+                    <h2 id="form-heading">Tambah Tugas</h2>
+                    <form id="todo-form" action="#">
+                        <label for="todo-input">Judul</label>
+                        <input type="text" id="todo-input" placeholder="Ketik disini..." required>
+
+                        <div class="notify-field">
+                            <label for="todo-notify">Waktu</label>
+                            <input type="datetime-local" id="todo-notify" aria-describedby="todo-notify-hint">
+                            <p class="notify-hint" id="todo-notify-hint" role="status" aria-live="polite"></p>
+                        </div>
+
+                        <fieldset class="photo-field" id="form-photo-field">
+                            <legend>Foto</legend>
+
+                            <button type="button" class="camera-open">Buka Kamera</button>
+
+                            <video class="camera-video" hidden autoplay playsinline></video>
+                            <canvas class="camera-canvas" hidden></canvas>
+
+                            <div class="camera-controls" hidden>
+                                <button type="button" class="camera-capture">Ambil Foto</button>
+                                <button type="button" class="camera-close">Tutup Kamera</button>
+                            </div>
+
+                            <figure class="photo-preview" hidden>
+                                <img class="photo-preview-img" alt="Pratinjau foto tugas yang akan disimpan">
+                                <figcaption>Foto siap disimpan</figcaption>
+                                <button type="button" class="photo-remove">Hapus Foto</button>
+                            </figure>
+
+                            <label for="photo-file">Atau pilih foto dari perangkat:</label>
+                            <input type="file" id="photo-file" accept="image/*" capture="environment">
+
+                            <p class="photo-status" role="status" aria-live="polite"></p>
+                        </fieldset>
+
+                        <button type="submit">Simpan Tugas</button>
                     </form>
                 </section>
 
-                <section class="list">
-                    <h2>Daftar Tugas</h2>
-                    <ul class="todo-list">
-                        <li class="todo-item">Membuat Website To Do List</li>
-                        <li class="todo-item">Push Rank Kaggle</li>
-                        <li class="todo-item">Belanja Bulanan</li>
-                    </ul>
+                <section class="list" aria-labelledby="list-heading">
+                    <h2 id="list-heading" tabindex="-1">Daftar Tugas</h2>
+                    <ul class="todo-list" id="todo-list"></ul>
                 </section>
-            </aside>
+            </div>
 
-            <section class="right-panel">
-                <h2>Detail Tugas</h2>
+            <section class="right-panel" aria-labelledby="detail-heading">
+                <h2 id="detail-heading">Detail Tugas</h2>
                 <div class="editor">
-                    <label for="edit-title">Judul Tugas :</label>
-                    <input type="text" id="edit-title" value="Membuat Website To Do List">
-                    <br>
-                    <label for="edit-desc">Deskripsi :</label>
-                    <textarea id="edit-desc" rows="3" cols="70">Membuat website To Do List menggunakan HTML dan CSS. Website ini akan menjadi reminder tentang tugas-tugas yang perlu dikerjakan.</textarea>
-                    <br>
-                    <button class="save">Simpan</button>
+                    <label for="edit-title">Judul</label>
+                    <input type="text" id="edit-title" placeholder="Pilih tugas di daftar untuk mengedit" disabled>
+
+                    <label for="edit-desc">Deskripsi</label>
+                    <textarea id="edit-desc" rows="3" placeholder="Deskripsi tugas..." disabled></textarea>
+
+                    <div class="notify-field">
+                        <label for="edit-notify">Waktu</label>
+                        <input type="datetime-local" id="edit-notify" disabled aria-describedby="edit-notify-hint">
+                        <p class="notify-hint" id="edit-notify-hint" role="status" aria-live="polite"></p>
+                    </div>
+
+                    <fieldset class="photo-field" id="edit-photo-field">
+                        <legend>Foto</legend>
+
+                        <button type="button" class="camera-open">Buka Kamera</button>
+
+                        <video class="camera-video" hidden autoplay playsinline></video>
+                        <canvas class="camera-canvas" hidden></canvas>
+
+                        <div class="camera-controls" hidden>
+                            <button type="button" class="camera-capture">Ambil Foto</button>
+                            <button type="button" class="camera-close">Tutup Kamera</button>
+                        </div>
+
+                        <figure class="photo-preview" hidden>
+                            <img class="photo-preview-img" alt="Foto tugas">
+                            <figcaption></figcaption>
+                            <button type="button" class="photo-remove">Hapus Foto</button>
+                        </figure>
+
+                        <label for="edit-photo-file">Atau pilih foto dari perangkat:</label>
+                        <input type="file" id="edit-photo-file" accept="image/*" capture="environment">
+
+                        <p class="photo-status" role="status" aria-live="polite"></p>
+                    </fieldset>
+
+                    <button type="button" class="save" id="save-detail" disabled>Simpan Perubahan</button>
                 </div>
             </section>
         </main>
 
         <footer>
-            <p>&copy; 2026 To Do List. All rights reserved.</p>
+            <p>&copy; 2026 To Do List. 5025251152 - Dewa Ngakan Putu Sunyananda Triyanca.</p>
         </footer>
+
+        <div class="sr-only" id="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
+
+        <script src="script.js"></script>
     </body>
 </html>
