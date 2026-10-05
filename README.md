@@ -19,14 +19,16 @@ Project ini merupakan web aplikasi manajemen tugas (To-Do List) dengan fitur pen
 
 ## Preview
 ### 1. Desktop Preview
-<img width="1535" height="693" alt="image" src="https://github.com/user-attachments/assets/dc369c96-28b4-4cd0-a1f4-10f92fdd5edd" />
-<img width="1535" height="692" alt="image" src="https://github.com/user-attachments/assets/a002e2f2-875f-41d0-8b1c-f6388d2bfe00" />
+<img width="1535" height="693" alt="image" src="https://github.com/user-attachments/assets/aa571827-3f0b-406f-a72f-27dd65ca5065" />
 
+<img width="1535" height="693" alt="image" src="https://github.com/user-attachments/assets/75784832-9dad-401d-ba75-02533ecb8635" />
 
 
 ### 2. Mobile Preview
-<img width="753" height="693" alt="image" src="https://github.com/user-attachments/assets/44633aa6-8cb5-426b-8785-f7cab4fd8847" />
-<img width="750" height="692" alt="image" src="https://github.com/user-attachments/assets/93193e9d-919a-4e6a-806e-d4a134021d5f" />
+<img width="220" height="477" alt="image" src="https://github.com/user-attachments/assets/dc377306-f1d1-4bd2-8184-7eb0ec50f9b5" />
+
+<img width="215" height="477" alt="image" src="https://github.com/user-attachments/assets/72a9a179-6403-458d-ad74-dd0b220250d5" />
+
 
 
 
