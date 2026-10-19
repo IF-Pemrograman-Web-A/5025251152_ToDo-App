@@ -1,4 +1,4 @@
-# [E03] The Lost Cavern - ToDo App
+# [E03] The Iron Citadel - ToDo App
 
 ## Identitas
 - Nama : Dewa Ngakan Putu Sunyananda Triyanca
@@ -6,16 +6,30 @@
 - Kelas : Pemrograman Web (A)
 
 ## Deskripsi
-Project ini merupakan web aplikasi manajemen tugas (To-Do List) dengan fitur penyimpanan permanen menggunakan IndexedDB. Aplikasi mendukung tema terang/gelap, notifikasi pengingat, dan upload foto tugas.
+Pengembangan aplikasi ToDo List E03 menjadi E04 dengan PHP dan MariaDB/MySQL. Penyimpanan utama tugas dipindahkan dari IndexedDB browser ke database relasional. Aplikasi mempertahankan desain antarmuka E03 dan menambahkan navigasi Personal dan Shared, pemisahan kode PHP, serta operasi CRUD melalui API PHP.
 
 ### Fitur Utama
-- **Penyimpanan permanen** - Data tugas tersimpan di IndexedDB browser
-- **Tema terang/gelap** - Toggle tema dengan persistensi menggunakan localStorage
-- **Notifikasi pengingat** - Reminder berbasis Web Notifications API
-- **Upload foto tugas** - Upload file atau ambil foto dari kamera
-- **Pratinjau foto** - Tampilkan preview dan hapus foto sebelum simpan
-- **Responsif** - Layout otomatis menyesuaikan desktop dan mobile
-- **Aksesibilitas** - Support keyboard navigation dan screen reader
+#### 1. Personal ToDo
+- Menambahkan, melihat, mengedit, menandai selesai/belum selesai, dan menghapus tugas.
+- Perubahan disimpan di database dan tetap tersedia setelah halaman dimuat ulang.
+- Judul, deskripsi, status penyelesaian, waktu pengingat, dan referensi foto tersimpan pada tabel `todos`.
+
+#### 2. Shared ToDo
+- Memisahkan tampilan tugas bersama dari tugas pribadi melalui menu **Shared**.
+- Menambahkan dan melihat tugas bersama.
+- Tugas Shared disimpan dengan `task_type = 'shared'`, sedangkan relasi pengguna tersimpan pada tabel `todo_shares`.
+
+### 3. PHP Modular dan Database
+- Antarmuka utama pada `index.php` dengan komponen terpisah di folder `includes/`.
+- Endpoint PHP pada folder `api/` untuk membaca, membuat, memperbarui, dan menghapus Todo.
+- Koneksi database menggunakan PDO dan prepared statements.
+- Struktur database dan data contoh disertakan pada `data.sql`.
+
+### 4. Fitur E03 yang Dipertahankan
+- Tema terang/gelap, dengan preferensi disimpan melalui `localStorage`.
+- Pengaturan jadwal reminder yang disimpan ke kolom `due_date`.
+- Upload foto dari perangkat atau kamera, pratinjau, dan penyimpanan file di folder `uploads/`.
+- Tampilan responsif dan dukungan aksesibilitas dasar.
 
 ## Preview
 ### 1. Desktop Preview
