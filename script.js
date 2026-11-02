@@ -82,7 +82,10 @@ async function uploadTodoPhoto(blob) {
 }
 
 async function refreshTodos() {
-    todos = await getTodosFromPHP();
+    const view = currentView;
+    const rows = await getTodosFromPHP(view);
+    if (view !== currentView) return;
+    todos = rows;
     if (selectedId !== null && !todos.some(t => t.id === selectedId)) selectedId = null;
     renderTodos();
 }
@@ -99,114 +102,18 @@ if (personalMenu) personalMenu.addEventListener('click', () => {currentView='per
 if (sharedMenu) sharedMenu.addEventListener('click', () => {currentView='shared';applyView();});
 
 
-async function getTodosFromPHP() {
-    const response = await fetch("api/get_todos.php?type=" + currentView, {
-        cache: "no-store"
-    });
-
-    if (!response.ok) {
-        throw new Error("Gagal mengambil data dari server.");
-    }
-
-    const result = await response.json();
-
-    if (!result.success || !Array.isArray(result.todos)) {
-        throw new Error("Respons API tidak valid.");
-    }
-
-    return result.todos.map((todo) => ({
-        id: Number(todo.id),
-        title: todo.title,
-        desc: todo.description ?? "",
-        completed: Number(todo.is_completed) === 1,
-        notifyAt: todo.due_date
-            ? new Date(todo.due_date.replace(" ", "T")).getTime()
-            : null,
-        originalNotifyAt: todo.due_date
-            ? new Date(todo.due_date.replace(" ", "T")).getTime()
-            : null,
-        notified: Number(todo.is_notified) === 1,
-        image: null,
-        imagePath: todo.image_path,
-        taskType: todo.task_type
-    }));
+// Semua perubahan disimpan lokal sebelum dicoba ke server.
+async function getTodosFromPHP(view = currentView) {
+    return todoSync.list(view);
 }
-
 async function addTodoToPHP(todo) {
-    const response = await fetch("api/create_todo.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            title: todo.title,
-            description: todo.desc || "",
-            due_date: toMysqlDate(todo.notifyAt),
-            image_path: todo.imagePath || null,
-            task_type: todo.taskType || currentView
-        })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-        throw new Error(
-            result.message || "Gagal menambahkan Todo."
-        );
-    }
-
-    return result.id;
+    return todoSync.create(todo);
 }
-
 async function updateTodoToPHP(todo) {
-    const response = await fetch("api/update_todo.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id: todo.id,
-            title: todo.title,
-            description: todo.desc || "",
-            completed: Boolean(todo.completed),
-            ...(todo.notifyAt !== todo.originalNotifyAt
-                ? {due_date: toMysqlDate(todo.notifyAt)} : {}),
-            image_path: todo.imagePath || null,
-            is_notified: Boolean(todo.notified)
-        })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-        throw new Error(
-            result.message || "Gagal memperbarui Todo."
-        );
-    }
-
-    return result;
+    return todoSync.update(todo);
 }
-
 async function deleteTodoFromPHP(id) {
-    const response = await fetch("api/delete_todo.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id: id
-        })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-        throw new Error(
-            result.message || "Gagal menghapus Todo."
-        );
-    }
-
-    return result;
+    return todoSync.remove(id, currentView);
 }
 
 const todoForm   = document.getElementById("todo-form");
@@ -533,7 +440,7 @@ todoForm.addEventListener("submit", async function (e){
 
     try {
         const submittedView = currentView;
-        newTodo.imagePath = await uploadTodoPhoto(newTodo.image);
+        newTodo.imagePath = null;
         newTodo.taskType = submittedView;
         const newId = await addTodoToPHP(newTodo);
         newTodo.id = newId;
@@ -549,7 +456,7 @@ todoForm.addEventListener("submit", async function (e){
         todoInput.focus();
     } catch (error) {
         console.error("Gagal menyimpan tugas:", error);
-        showMessage("Tugas gagal disimpan.");
+        showMessage(error.message || "Tugas gagal disimpan.");
     }
 });
 
@@ -563,7 +470,9 @@ async function selectTodo(id){
     autoResizeTextarea(editDesc);
 
     editPicker.setPhoto(null, '', false);
-    if (todo.imagePath) {
+    if (todo.image instanceof Blob) {
+        editPicker.setPhoto(todo.image, 'Foto untuk tugas: ' + todo.title, false);
+    } else if (todo.imagePath) {
         try {
             const resp = await fetch(todo.imagePath);
             if (!resp.ok) throw new Error('Foto tidak dapat dimuat');
@@ -625,7 +534,8 @@ saveDetailBtn.addEventListener("click", async function () {
 
     try {
         if (editPicker.isDirty()) {
-            candidate.imagePath = await uploadTodoPhoto(editPicker.getPhoto());
+            candidate.image = editPicker.getPhoto();
+            candidate.imagePath = null;
         }
         await updateTodoToPHP(candidate);
         Object.assign(todo, candidate);
@@ -636,7 +546,7 @@ saveDetailBtn.addEventListener("click", async function () {
         renderTodos();
     } catch (error) {
         console.error("Gagal memperbarui tugas:", error);
-        showMessage("Perubahan gagal disimpan.");
+        showMessage(error.message || "Perubahan gagal disimpan.");
     }
 });
 
@@ -789,6 +699,8 @@ editNotify.addEventListener("input", updateNotifyHints);
 
 async function init() {
     loadTheme();
+    await todoOffline.ready();
+    await todoSync.sync();
 
     try {
         todos = await getTodosFromPHP();
@@ -809,4 +721,45 @@ async function init() {
     if (todoIdFromUrl) selectTodo(todoIdFromUrl);
 }
 
+// ID sementara diganti setelah server mengonfirmasi create.
+window.addEventListener('todo:id', (event) => {
+    const {oldId, newId} = event.detail;
+    for (const todo of todos) if (todo.id === oldId) todo.id = newId;
+    if (selectedId === oldId) selectedId = newId;
+    renderTodos();
+});
+
 init();
+
+const installButton = document.getElementById("install-button");
+let pendingInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+
+    pendingInstallPrompt = event;
+    installButton.hidden = false;
+});
+
+installButton.addEventListener("click", async () => {
+    if (!pendingInstallPrompt) return;
+
+    const promptEvent = pendingInstallPrompt;
+
+    pendingInstallPrompt = null;
+    installButton.hidden = true;
+
+    try {
+        await promptEvent.prompt();
+
+        const result = await promptEvent.userChoice;
+        console.log("Hasil instalasi:", result.outcome);
+    } catch (error) {
+        console.error("Gagal membuka dialog instalasi:", error);
+    }
+});
+
+window.addEventListener("appinstalled", () => {
+    pendingInstallPrompt = null;
+    installButton.hidden = true;
+});

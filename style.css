@@ -540,3 +540,84 @@ body.dark-mode .todo-nav .nav-item.active {
     color: #ffffff;
     border-color: #087bad;
 }
+
+header .header-content {
+    flex-wrap: wrap;
+}
+
+header #theme-toggle {
+    position: static;
+}
+
+header #install-button {
+    width: auto;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #0b7bb3;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header #install-button[hidden] {
+    display: none;
+}
+
+header #install-button:focus-visible {
+    outline: 3px solid #ffdf70;
+    outline-offset: 4px;
+}
+
+body.dark-mode header #install-button {
+    background-color: #2c2f33;
+    color: #f5c518;
+}
+
+header .header-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: none;
+}
+
+header .header-content h1 {
+    grid-column: 2;
+    margin: 0;
+    text-align: center;
+}
+
+header .header-actions {
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+header .header-actions #theme-toggle,
+header .header-actions #install-button {
+    position: static;
+    width: auto;
+    margin: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+    header .header-content {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    header .header-content h1 {
+        grid-column: 1;
+    }
+
+    header .header-actions {
+        grid-column: 1;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+}

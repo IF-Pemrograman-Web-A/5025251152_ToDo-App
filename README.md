@@ -1,4 +1,4 @@
-# [E03] The Iron Citadel - ToDo App
+# [E05] The Offline Abyss — ToDo App
 
 ## Identitas
 - Nama : Dewa Ngakan Putu Sunyananda Triyanca
@@ -6,41 +6,51 @@
 - Kelas : Pemrograman Web (A)
 
 ## Deskripsi
-Pengembangan aplikasi ToDo List E03 menjadi E04 dengan PHP dan MariaDB/MySQL. Penyimpanan utama tugas dipindahkan dari IndexedDB browser ke database relasional. Aplikasi mempertahankan desain antarmuka E03 dan menambahkan navigasi Personal dan Shared, pemisahan kode PHP, serta operasi CRUD melalui API PHP.
+Aplikasi pengelola tugas yang dikembangkan menjadi Progressive Web App (PWA). Aplikasi dapat dipasang, dibuka tanpa jaringan setelah kunjungan awal, serta menyimpan perubahan tugas secara lokal sebelum disinkronkan ke server.
 
 ### Fitur Utama
-#### 1. Personal ToDo
-- Menambahkan, melihat, mengedit, menandai selesai/belum selesai, dan menghapus tugas.
-- Perubahan disimpan di database dan tetap tersedia setelah halaman dimuat ulang.
-- Judul, deskripsi, status penyelesaian, waktu pengingat, dan referensi foto tersimpan pada tabel `todos`.
+- **Personal ToDo :** tambah, baca, edit, tandai selesai/belum selesai, dan hapus tugas.
+- **Shared ToDo :** tambah dan baca tugas bersama. Edit, hapus, dan perubahan status tetap dinonaktifkan sesuai pada E04.
+- **PWA :** manifest, ikon PNG 192 × 192 dan 512 × 512, serta tampilan `standalone`.
+- **Tombol instalasi :** menggunakan `beforeinstallprompt`, disembunyikan sampai browser menyediakan prompt dan setelah aplikasi terpasang.
+- **Offline :** precache tampilan dasar aplikasi, CSS, JavaScript, manifest, ikon, dan halaman cadangan.
+- **Penyimpanan lokal :** tugas dan perubahan yang belum dikirim disimpan dalam IndexedDB.
+- **Sinkronisasi :** antrean dikirim ke PHP/MySQL ketika koneksi tersedia dan aplikasi terbuka.
+- **Pencegahan tugas ganda :** setiap operasi mempunyai ID unik yang dicatat di server agar pengiriman ulang tidak memproses operasi yang sama dua kali.
+- **Foto tugas :** pilih foto atau ambil melalui kamera, foto baru dapat disimpan lokal sebelum diunggah saat sinkronisasi.
+- **Tema dan aksesibilitas :** mode terang/gelap, label form, navigasi keyboard, serta tampilan responsif.
+- **Pengingat :** menggunakan Web Notifications API, pemeriksaan jadwal berjalan ketika halaman aplikasi aktif/terbuka.
 
-#### 2. Shared ToDo
-- Memisahkan tampilan tugas bersama dari tugas pribadi melalui menu **Shared**.
-- Menambahkan dan melihat tugas bersama.
-- Tugas Shared disimpan dengan `task_type = 'shared'`, sedangkan relasi pengguna tersimpan pada tabel `todo_shares`.
+## Dokumentasi Pengerjaan
+### 1. Manifest
 
-### 3. PHP Modular dan Database
-- Antarmuka utama pada `index.php` dengan komponen terpisah di folder `includes/`.
-- Endpoint PHP pada folder `api/` untuk membaca, membuat, memperbarui, dan menghapus Todo.
-- Koneksi database menggunakan PDO dan prepared statements.
-- Struktur database dan data contoh disertakan pada `data.sql`.
+![Manifest dan konfigurasi aplikasi](img/manifest.png)
 
-### 4. Fitur E03 yang Dipertahankan
-- Tema terang/gelap, dengan preferensi disimpan melalui `localStorage`.
-- Pengaturan jadwal reminder yang disimpan ke kolom `due_date`.
-- Upload foto dari perangkat atau kamera, pratinjau, dan penyimpanan file di folder `uploads/`.
-- Tampilan responsif dan dukungan aksesibilitas dasar.
+### 2. Service Worker aktif
 
-## Preview
-### 1. Desktop Preview
-<img width="1535" height="693" alt="image" src="https://github.com/user-attachments/assets/dc369c96-28b4-4cd0-a1f4-10f92fdd5edd" />
-<img width="1535" height="692" alt="image" src="https://github.com/user-attachments/assets/a002e2f2-875f-41d0-8b1c-f6388d2bfe00" />
+![Service Worker aktif pada scope E05](img/sw.png)
 
+### 3. Cache Storage
 
+![File app shell tersedia dalam cache](img/chache%20storage.png)
 
-### 2. Mobile Preview
-<img width="753" height="693" alt="image" src="https://github.com/user-attachments/assets/44633aa6-8cb5-426b-8785-f7cab4fd8847" />
-<img width="750" height="692" alt="image" src="https://github.com/user-attachments/assets/93193e9d-919a-4e6a-806e-d4a134021d5f" />
+### 4. Aplikasi saat offline
 
+![Daftar dan detail tugas saat jaringan Offline](img/offline.png)
 
+### 5. Antrean sebelum sinkronisasi
+
+![Operasi create tersimpan dalam outbox](img/offline%20outbox.png)
+
+### 6. Antrean setelah sinkronisasi
+
+![Hasil pemeriksaan antrean berupa array kosong](img/sync-offline%20complate.png)
+
+### 7. Halaman cadangan offline
+
+![Halaman cadangan saat navigasi tidak tersedia](img/offline%20fallback.png)
+
+### 8. Aplikasi terpasang
+
+![ToDo App dibuka sebagai aplikasi mandiri](img/installed%20app.png)
 

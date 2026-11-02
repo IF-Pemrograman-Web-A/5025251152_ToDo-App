@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b7bb3">
+    <title>Offline — ToDo App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body{
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        main{
+            width: 100%;
+            max-width: 420px;
+            padding: 32px;
+            border-radius: 16px;
+            background: #f5f5f5;
+            text-align: center;
+            box-shadow: 0 8px 24px #00000012;
+        }
+
+        img{
+            width: 96px;
+            height: 96px;
+            border-radius: 16px;
+        }
+
+        h1{
+            color: #0b7bb3;
+        }
+
+        p{
+            line-height: 1.6;
+        }
+
+        a{
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #0b7bb3;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <img src="./icons/icon-192.png" alt="ToDo App">
+        <h1>Anda sedang offline</h1>
+        <p>Halaman yang Anda tuju belum tersedia secara offline.</p>
+        <p>Coba kembali ke aplikasi atau periksa koneksi Anda.</p>
+        <a href="./index.php">Kembali ke ToDo App</a>
+    </main>
+</body>
+</html>

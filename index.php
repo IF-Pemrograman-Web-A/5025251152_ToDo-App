@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ToDo List</title>
         <link rel="stylesheet" href="style.css">
+        <link rel="manifest" href="./manifest.webmanifest">
+        <meta name="theme-color" content="#0b7bb3">
+        <link rel="icon" type="image/png" href="./icons/icon-192.png">
     </head>
 
     <body>
@@ -116,6 +119,8 @@
 
         <div class="sr-only" id="live-region" role="status" aria-live="polite" aria-atomic="true"></div>
 
-        <script src="script.js?v=e04-shared-add-1"></script>
+        <script src="./offline-db.js"></script>
+        <script src="./offline-sync.js"></script>
+        <script src="./script.js"></script>
     </body>
 </html>
