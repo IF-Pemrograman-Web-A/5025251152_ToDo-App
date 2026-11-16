@@ -101,19 +101,104 @@ function applyView() {
 if (personalMenu) personalMenu.addEventListener('click', () => {currentView='personal';applyView();});
 if (sharedMenu) sharedMenu.addEventListener('click', () => {currentView='shared';applyView();});
 
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+        cache: "no-store",
+        ...options
+    });
 
-// Semua perubahan disimpan lokal sebelum dicoba ke server.
+    if (response.status === 204) {
+        return null;
+    }
+
+    let result;
+
+    try {
+        result = await response.json();
+    } catch {
+        throw new Error("Server tidak mengirim respons JSON yang valid.");
+    }
+
+    if (!response.ok || !result.success) {
+        const message =
+            result.error?.message ||
+            result.message ||
+            "Permintaan API gagal.";
+
+        throw new Error(message);
+    }
+
+    return result;
+}
+
+function todoFromApi(row) {
+    const due = row.due_date
+        ? new Date(row.due_date.replace(" ", "T")).getTime()
+        : null;
+
+    return {
+        id: Number(row.id),
+        title: row.title,
+        desc: row.description ?? "",
+        completed: Number(row.is_completed) === 1,
+        notifyAt: due,
+        originalNotifyAt: due,
+        notified: Number(row.is_notified) === 1,
+        image: null,
+        imagePath: row.image_path,
+        taskType: row.task_type
+    };
+}
+
 async function getTodosFromPHP(view = currentView) {
-    return todoSync.list(view);
+    const result = await apiRequest(
+        `api/todos.php?type=${encodeURIComponent(view)}`
+    );
+
+    return result.data.map(todoFromApi);
 }
+
 async function addTodoToPHP(todo) {
-    return todoSync.create(todo);
+    const result = await apiRequest("api/todos.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            title: todo.title,
+            description: todo.desc || "",
+            due_date: toMysqlDate(todo.notifyAt),
+            image_path: todo.imagePath || null,
+            task_type: todo.taskType || currentView
+        })
+    });
+
+    return Number(result.data.id);
 }
+
 async function updateTodoToPHP(todo) {
-    return todoSync.update(todo);
+    const result = await apiRequest(
+        `api/todos.php?id=${encodeURIComponent(todo.id)}`,
+        {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title: todo.title,
+                description: todo.desc || "",
+                completed: Boolean(todo.completed),
+                due_date: toMysqlDate(todo.notifyAt),
+                image_path: todo.imagePath || null,
+                is_notified: Boolean(todo.notified)
+            })
+        }
+    );
+
+    return result.data;
 }
+
 async function deleteTodoFromPHP(id) {
-    return todoSync.remove(id, currentView);
+    return apiRequest(
+        `api/todos.php?id=${encodeURIComponent(id)}`,
+        { method: "DELETE" }
+    );
 }
 
 const todoForm   = document.getElementById("todo-form");
